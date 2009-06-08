@@ -1,8 +1,8 @@
 function GetMinimapShape() return "SQUARE" end
 
 local EPMinimap = CreateFrame("Frame")
-EPMinimap:RegisterEvent("PLAYER_LOGIN");
-EPMinimap:RegisterEvent("MINIMAP_PING");
+EPMinimap:RegisterEvent("PLAYER_LOGIN")
+EPMinimap:RegisterEvent("MINIMAP_PING")
 
 local currentZoom = 0
 local maxZoom = 0
@@ -34,8 +34,8 @@ local MouseZoom = function(self, z)
 end
 
 function EPMinimap:MessageOutput(name, x, y)
-	ChatFrame1:AddMessage(string.format("|cffDAFF8A[Minimap]|r %s pinged the map at %.2f, %.2f", name, x, y));
-end;
+	ChatFrame1:AddMessage(string.format("|cffDAFF8A[Minimap]|r %s pinged the map at %.2f, %.2f", name, x, y))
+end
 
 function EPMinimap:MINIMAP_PING(self, event, ...)
 	if (arg1 ~= "player") then
