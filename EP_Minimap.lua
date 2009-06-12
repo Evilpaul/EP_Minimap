@@ -6,6 +6,8 @@ EPMinimap:RegisterEvent("MINIMAP_PING")
 
 local currentZoom = 0
 local maxZoom = 0
+local lastPingTime = 0
+local lastPingPerson = "player"
 local frames = {
 	MinimapZoomIn,
 	MinimapZoomOut,
@@ -33,17 +35,28 @@ local MouseZoom = function(self, z)
 	end
 end
 
-function EPMinimap:MessageOutput(name, x, y)
-	ChatFrame1:AddMessage(string.format("|cffDAFF8A[Minimap]|r %s pinged the map at %.2f, %.2f", name, x, y))
+function EPMinimap:MessageOutput(name)
+	ChatFrame1:AddMessage(string.format("|cffDAFF8A[Minimap]|r %s pinged the map", name))
 end
 
 function EPMinimap:MINIMAP_PING(self, event, ...)
-	if (arg1 ~= "player") then
-		self:MessageOutput(arg1, arg2, arg3)
+	local currentTime = GetTime()
+	local pingPlayer, _ = UnitName(arg1)
+
+	if not pingPlayer then return end
+
+	if ((arg1 ~= "player") and (arg1 ~= "pet") and (arg1 ~= "vehicle")) or
+	   ((arg1 ~= lastPingPerson) and
+	    ((currentTime - lastPingTime) > 3)) then
+		lastPingTime = currentTime
+		lastPingPerson = arg1
+		EPMinimap:MessageOutput(pingPlayer)
 	end
 end
 
 function EPMinimap:PLAYER_LOGIN(self, event, ...)
+
+	lastPingTime = GetTime()
 
 	-- Enable mouse zoom
 	maxZoom = Minimap:GetZoomLevels()
@@ -90,6 +103,9 @@ function EPMinimap:PLAYER_LOGIN(self, event, ...)
 		frame:Hide()
 		frame[i] = nil
 	end
+
+	-- unregister as we no longer need this event
+	EPMinimap:UnregisterEvent("PLAYER_LOGIN")
 end
 
 EPMinimap:SetScript("OnEvent", function(self, event, ...)
