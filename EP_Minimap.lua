@@ -7,8 +7,8 @@ EPMinimap:RegisterEvent("MINIMAP_PING")
 local currentZoom = 0
 local maxZoom = 0
 local lastPingTime = 0
-local lastPingPerson = "player"
-local frames = {
+local lastPingPerson = ""
+local frames = { -- table of stuff we want to disable and hide
 	MinimapZoomIn,
 	MinimapZoomOut,
 	MinimapToggleButton,
@@ -39,24 +39,26 @@ function EPMinimap:MessageOutput(name)
 	ChatFrame1:AddMessage(string.format("|cffDAFF8A[Minimap]|r %s pinged the map", name))
 end
 
-function EPMinimap:MINIMAP_PING(self, event, ...)
+function EPMinimap:MINIMAP_PING(event, unitID, x, y)
+
+	-- do not print message if we pinged the map
+	if (unitID == "player") or (unitID == "pet") or (unitID == "vehicle") then return end
+
 	local currentTime = GetTime()
-	local pingPlayer, _ = UnitName(arg1)
 
-	if not pingPlayer then return end
+	-- do not print message more than once every 3 seconds if someone is spamming the map
+	if (unitID == lastPingPerson) and ((currentTime - lastPingTime) < 3) then return end
 
-	if ((arg1 ~= "player") and (arg1 ~= "pet") and (arg1 ~= "vehicle")) or
-	   ((arg1 ~= lastPingPerson) and
-	    ((currentTime - lastPingTime) > 3)) then
-		lastPingTime = currentTime
-		lastPingPerson = arg1
-		EPMinimap:MessageOutput(pingPlayer)
-	end
+	-- store the details of who pinged the map and when
+	lastPingTime = currentTime
+	lastPingPerson = unitID
+
+	-- print out the name of who pinged the map
+	local pingPlayer, _ = UnitName(unitID)
+	EPMinimap:MessageOutput(pingPlayer)
 end
 
-function EPMinimap:PLAYER_LOGIN(self, event, ...)
-
-	lastPingTime = GetTime()
+function EPMinimap:PLAYER_LOGIN()
 
 	-- Enable mouse zoom
 	maxZoom = Minimap:GetZoomLevels()
@@ -101,8 +103,9 @@ function EPMinimap:PLAYER_LOGIN(self, event, ...)
 	-- Hide all the items we do not want to see
 	for i, frame in pairs(frames) do
 		frame:Hide()
-		frame[i] = nil
 	end
+
+	frames = nil
 
 	-- unregister as we no longer need this event
 	EPMinimap:UnregisterEvent("PLAYER_LOGIN")
