@@ -58,7 +58,7 @@ function EPMinimap:MINIMAP_PING(event, unitID, x, y)
 	EPMinimap:MessageOutput(pingPlayer)
 end
 
-function EPMinimap:PLAYER_LOGIN(self, event, ...)
+function EPMinimap:PLAYER_LOGIN()
 
 	-- Enable mouse zoom
 	maxZoom = Minimap:GetZoomLevels()
