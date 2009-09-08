@@ -1,4 +1,4 @@
-## Interface: 30100
+## Interface: 30200
 ## Title: EP |cffDAFF8A[Minimap]|r
 ## Notes: Square minimap, just like all the rest
 ## Author: EvilPaul

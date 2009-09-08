@@ -8,21 +8,21 @@ local currentZoom = 0
 local maxZoom = 0
 local lastPingTime = 0
 local lastPingPerson = ""
-local frames = { -- table of stuff we want to disable and hide
-	MinimapZoomIn,
-	MinimapZoomOut,
-	MinimapToggleButton,
-	MinimapBorderTop,
+local frames = {
+	GameTimeFrame,
+	MiniMapBattlefieldBorder,
+	MiniMapMailBorder,
+	MiniMapTrackingBackground,
+	MiniMapTrackingButtonBorder,
+	MiniMapVoiceChatFrame,
 	MiniMapWorldMapButton,
 	MinimapBorder,
-	MiniMapVoiceChatFrame,
 	MinimapBorder,
-	GameTimeFrame,
+	MinimapBorderTop,
+	MinimapToggleButton,
 	MinimapZoneTextButton,
-	MiniMapMailBorder,
-	MiniMapBattlefieldBorder,
-	MiniMapTrackingButtonBorder,
-	MiniMapTrackingBackground,
+	MinimapZoomIn,
+	MinimapZoomOut
 }
 
 local MouseZoom = function(self, z)
@@ -44,7 +44,7 @@ function EPMinimap:MINIMAP_PING(event, unitID, x, y)
 	-- do not print message if we pinged the map
 	if (unitID == "player") or (unitID == "pet") or (unitID == "vehicle") then return end
 
-	local currentTime = GetTime()
+ 	local currentTime = GetTime()
 
 	-- do not print message more than once every 3 seconds if someone is spamming the map
 	if (unitID == lastPingPerson) and ((currentTime - lastPingTime) < 3) then return end
@@ -58,7 +58,7 @@ function EPMinimap:MINIMAP_PING(event, unitID, x, y)
 	EPMinimap:MessageOutput(pingPlayer)
 end
 
-function EPMinimap:PLAYER_LOGIN()
+function EPMinimap:PLAYER_LOGIN(self, event, ...)
 
 	-- Enable mouse zoom
 	maxZoom = Minimap:GetZoomLevels()
@@ -68,23 +68,21 @@ function EPMinimap:PLAYER_LOGIN()
 	-- Adjust the tracking icon to be within the minimap frame
 	MiniMapTracking:SetParent(Minimap)
 	MiniMapTracking:ClearAllPoints()
-	MiniMapTracking:SetPoint("TOPLEFT", -2, -2)
+	MiniMapTracking:SetPoint("TOPRIGHT", Minimap, "BOTTOMRIGHT", 0, 0)
 
 	-- Adjust the PvP icon to be within the minimap frame
 	MiniMapBattlefieldFrame:SetParent(Minimap)
 	MiniMapBattlefieldFrame:ClearAllPoints()
-	MiniMapBattlefieldFrame:SetPoint("TOPRIGHT", -2, -2)
+	MiniMapBattlefieldFrame:SetPoint("TOP", Minimap, "BOTTOM", 0, 0)
 
 	-- Adjust the mail icon to be within the minimap frame
 	MiniMapMailFrame:SetParent(Minimap)
 	MiniMapMailFrame:ClearAllPoints()
-	MiniMapMailFrame:SetPoint("BOTTOMRIGHT", 0, 0)
+	MiniMapMailFrame:SetPoint("TOPLEFT", Minimap, "BOTTOMLEFT", 0, 0)
+	MiniMapMailFrame:SetScale(1.2)
 
 	-- Apply mask so that the square map looks right
 	Minimap:SetMaskTexture("Interface\\AddOns\\EP_Minimap\\textures\\Mask")
-
-	-- Use scaled blip texture as we are scaling the minimap
-	Minimap:SetBlipTexture("Interface\\Addons\\EP_Minimap\\textures\\scaled80")
 
 	-- Change minimap scale
 	Minimap:SetScale(0.8)
@@ -94,17 +92,23 @@ function EPMinimap:PLAYER_LOGIN()
 	Minimap:SetPoint("TOPRIGHT", "UIParent", "TOPRIGHT", -25, -30)
 
 	-- Set the background
-	Minimap:SetBackdrop({ 
-		bgFile ="Interface\\ChatFrame\\ChatFrameBackground",
-		insets = {left = -1, right = -1, top = -1, bottom = -1},
-	}) 
-	Minimap:SetBackdropColor(0, 0, 0, .4)
+	Minimap:SetBackdrop({
+		bgFile = "Interface\\Tooltips\\UI-Tooltip-Background",
+		insets = {
+			left = -1,
+			right = -1,
+			top = -1,
+			bottom = -1
+		}
+	})
+	Minimap:SetBackdropColor(0, 0, 0, 1)
 
 	-- Hide all the items we do not want to see
 	for i, frame in pairs(frames) do
 		frame:Hide()
 	end
 
+	-- Empty the table to reduce memory
 	frames = nil
 
 	-- unregister as we no longer need this event
