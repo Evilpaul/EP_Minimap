@@ -1,13 +1,13 @@
-function GetMinimapShape() return "SQUARE" end
+function GetMinimapShape() return 'SQUARE' end
 
 local EPMinimap = CreateFrame("Frame")
-EPMinimap:RegisterEvent("PLAYER_LOGIN")
-EPMinimap:RegisterEvent("MINIMAP_PING")
+EPMinimap:RegisterEvent('PLAYER_LOGIN')
+EPMinimap:RegisterEvent('MINIMAP_PING')
 
 local currentZoom = 0
 local maxZoom = 0
 local lastPingTime = 0
-local lastPingPerson = ""
+local lastPingPerson = ''
 local frames = {
 	GameTimeFrame,
 	MiniMapBattlefieldBorder,
@@ -36,13 +36,13 @@ local MouseZoom = function(self, z)
 end
 
 function EPMinimap:MessageOutput(name)
-	ChatFrame1:AddMessage(string.format("|cffDAFF8A[Minimap]|r %s pinged the map", name))
+	ChatFrame1:AddMessage(string.format('|cffDAFF8A[Minimap]|r %s pinged the map', name))
 end
 
 function EPMinimap:MINIMAP_PING(event, unitID, x, y)
 
 	-- do not print message if we pinged the map
-	if (unitID == "player") or (unitID == "pet") or (unitID == "vehicle") then return end
+	if (unitID == 'player') or (unitID == 'pet') or (unitID == 'vehicle') then return end
 
  	local currentTime = GetTime()
 
@@ -63,37 +63,38 @@ function EPMinimap:PLAYER_LOGIN()
 	-- Enable mouse zoom
 	maxZoom = Minimap:GetZoomLevels()
 	Minimap:EnableMouseWheel(true)
-	Minimap:SetScript("OnMouseWheel", MouseZoom)
+	Minimap:SetScript('OnMouseWheel', MouseZoom)
 
-	-- Adjust the tracking icon to be within the minimap frame
+	-- Adjust the tracking icon position
 	MiniMapTracking:SetParent(Minimap)
 	MiniMapTracking:ClearAllPoints()
-	MiniMapTracking:SetPoint("TOPRIGHT", Minimap, "BOTTOMRIGHT", 0, 0)
+	MiniMapTracking:SetPoint('TOPRIGHT', Minimap, 'BOTTOMRIGHT', 0, 0)
+	
 
-	-- Adjust the PvP icon to be within the minimap frame
+	-- Adjust the PvP icon position
 	MiniMapBattlefieldFrame:SetParent(Minimap)
 	MiniMapBattlefieldFrame:ClearAllPoints()
-	MiniMapBattlefieldFrame:SetPoint("TOP", Minimap, "BOTTOM", 0, 0)
+	MiniMapBattlefieldFrame:SetPoint('TOP', Minimap, 'BOTTOM', 0, 0)
 
-	-- Adjust the mail icon to be within the minimap frame
+	-- Adjust the mail icon position
 	MiniMapMailFrame:SetParent(Minimap)
 	MiniMapMailFrame:ClearAllPoints()
-	MiniMapMailFrame:SetPoint("TOPLEFT", Minimap, "BOTTOMLEFT", 0, 0)
+	MiniMapMailFrame:SetPoint('TOPLEFT', Minimap, 'BOTTOMLEFT', 0, 0)
 	MiniMapMailFrame:SetScale(1.2)
 
 	-- Apply mask so that the square map looks right
-	Minimap:SetMaskTexture("Interface\\AddOns\\EP_Minimap\\textures\\Mask")
+	Minimap:SetMaskTexture('Interface\\AddOns\\EP_Minimap\\textures\\Mask')
 
 	-- Change minimap scale
 	Minimap:SetScale(0.8)
 
 	-- Move the minimap
 	Minimap:ClearAllPoints()
-	Minimap:SetPoint("TOPRIGHT", "UIParent", "TOPRIGHT", -25, -30)
+	Minimap:SetPoint('TOPRIGHT', 'UIParent', 'TOPRIGHT', -25, -30)
 
 	-- Set the background
 	Minimap:SetBackdrop({
-		bgFile = "Interface\\Tooltips\\UI-Tooltip-Background",
+		bgFile = 'Interface\\Tooltips\\UI-Tooltip-Background',
 		insets = {
 			left = -1,
 			right = -1,
@@ -112,9 +113,9 @@ function EPMinimap:PLAYER_LOGIN()
 	frames = nil
 
 	-- unregister as we no longer need this event
-	EPMinimap:UnregisterEvent("PLAYER_LOGIN")
+	EPMinimap:UnregisterEvent('PLAYER_LOGIN')
 end
 
-EPMinimap:SetScript("OnEvent", function(self, event, ...)
+EPMinimap:SetScript('OnEvent', function(self, event, ...)
 	self[event](self, event, ...)
 end)
