@@ -70,6 +70,10 @@ function EPMinimap:PLAYER_LOGIN()
 	MiniMapTracking:ClearAllPoints()
 	MiniMapTracking:SetPoint('TOPRIGHT', Minimap, 'BOTTOMRIGHT', 0, 0)
 	
+	-- Adjust the LFD icon position
+	MiniMapLFGFrame:SetParent(Minimap)
+	MiniMapLFGFrame:ClearAllPoints()
+	MiniMapLFGFrame:SetPoint('TOP', Minimap, 'BOTTOM', 0, 0)
 
 	-- Adjust the PvP icon position
 	MiniMapBattlefieldFrame:SetParent(Minimap)
