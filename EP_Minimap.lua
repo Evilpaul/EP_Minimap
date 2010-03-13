@@ -64,6 +64,11 @@ function EPMinimap:PLAYER_LOGIN()
 	maxZoom = Minimap:GetZoomLevels()
 	Minimap:EnableMouseWheel(true)
 	Minimap:SetScript('OnMouseWheel', MouseZoom)
+	
+	-- Adjust the Instance Difficulty flag
+	MiniMapInstanceDifficulty:SetParent(Minimap)
+	MiniMapInstanceDifficulty:ClearAllPoints()
+	MiniMapInstanceDifficulty:SetPoint('TOPLEFT', Minimap, 'BOTTOMLEFT', 0, 0)
 
 	-- Adjust the tracking icon position
 	MiniMapTracking:SetParent(Minimap)
