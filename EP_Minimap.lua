@@ -105,10 +105,10 @@ function EPMinimap:PLAYER_LOGIN()
 	Minimap:SetBackdrop({
 		bgFile = 'Interface\\Tooltips\\UI-Tooltip-Background',
 		insets = {
-			left = -1,
-			right = -1,
-			top = -1,
-			bottom = -1
+			left = -1 * (768 / 1080),
+			right = -1 * (768 / 1080),
+			top = -1 * (768 / 1080),
+			bottom = -1 * (768 / 1080)
 		}
 	})
 	Minimap:SetBackdropColor(0, 0, 0, 1)
