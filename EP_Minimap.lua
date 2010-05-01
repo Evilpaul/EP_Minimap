@@ -10,19 +10,21 @@ local lastPingTime = 0
 local lastPingPerson = ''
 local frames = {
 	GameTimeFrame,
+	MinimapZoneTextButton,
+	MiniMapWorldMapButton,
+	MinimapToggleButton,
+	MiniMapVoiceChatFrame,
+	MinimapZoomIn,
+	MinimapZoomOut,
+}
+local borders = {
+	MinimapBorderTop,
 	MiniMapBattlefieldBorder,
 	MiniMapMailBorder,
 	MiniMapTrackingBackground,
 	MiniMapTrackingButtonBorder,
-	MiniMapVoiceChatFrame,
-	MiniMapWorldMapButton,
 	MinimapBorder,
 	MinimapBorder,
-	MinimapBorderTop,
-	MinimapToggleButton,
-	MinimapZoneTextButton,
-	MinimapZoomIn,
-	MinimapZoomOut
 }
 
 local MouseZoom = function(self, z)
@@ -114,12 +116,17 @@ function EPMinimap:PLAYER_LOGIN()
 	Minimap:SetBackdropColor(0, 0, 0, 1)
 
 	-- Hide all the items we do not want to see
-	for i, frame in pairs(frames) do
+	for _, frame in pairs(frames) do
+		frame:UnregisterAllEvents()
 		frame:Hide()
 	end
+	for _, border in pairs(borders) do
+		border:Hide()
+	end
 
-	-- Empty the table to reduce memory
+	-- Empty the tables to reduce memory
 	frames = nil
+	borders = nil
 
 	-- unregister as we no longer need this event
 	EPMinimap:UnregisterEvent('PLAYER_LOGIN')
