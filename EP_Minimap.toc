@@ -9,3 +9,4 @@
 ## X-Category: Maps
 
 EP_Minimap.lua
+EP_Minimap_Ping.lua

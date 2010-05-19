@@ -1,14 +1,16 @@
 function GetMinimapShape() return 'SQUARE' end
 
-local EPMinimap = CreateFrame("Frame")
+local EPMinimap = CreateFrame('Frame')
 EPMinimap:RegisterEvent('PLAYER_LOGIN')
-EPMinimap:RegisterEvent('MINIMAP_PING')
 
-local currentZoom = 0
-local maxZoom = 0
-local lastPingTime = 0
-local lastPingPerson = ''
-local frames = {
+local objects = {
+	MinimapBorderTop,
+	MiniMapBattlefieldBorder,
+	MiniMapMailBorder,
+	MiniMapTrackingBackground,
+	MiniMapTrackingButtonBorder,
+	MinimapBorder,
+	MinimapBorder,
 	GameTimeFrame,
 	MinimapZoneTextButton,
 	MiniMapWorldMapButton,
@@ -17,56 +19,21 @@ local frames = {
 	MinimapZoomIn,
 	MinimapZoomOut,
 }
-local borders = {
-	MinimapBorderTop,
-	MiniMapBattlefieldBorder,
-	MiniMapMailBorder,
-	MiniMapTrackingBackground,
-	MiniMapTrackingButtonBorder,
-	MinimapBorder,
-	MinimapBorder,
-}
 
-local MouseZoom = function(self, z)
-	currentZoom = Minimap:GetZoom()
-
-	if(z > 0 and currentZoom < maxZoom) then
-		Minimap:SetZoom(currentZoom + 1)
-	elseif(z < 0 and currentZoom > 0) then
-		Minimap:SetZoom(currentZoom - 1)
-	end
-end
-
-function EPMinimap:MessageOutput(name)
-	ChatFrame1:AddMessage(string.format('|cffDAFF8A[Minimap]|r %s pinged the map', name))
-end
-
-function EPMinimap:MINIMAP_PING(event, unitID, x, y)
-
-	-- do not print message if we pinged the map
-	if (unitID == 'player') or (unitID == 'pet') or (unitID == 'vehicle') then return end
-
- 	local currentTime = GetTime()
-
-	-- do not print message more than once every 3 seconds if someone is spamming the map
-	if (unitID == lastPingPerson) and ((currentTime - lastPingTime) < 3) then return end
-
-	-- store the details of who pinged the map and when
-	lastPingTime = currentTime
-	lastPingPerson = unitID
-
-	-- print out the name of who pinged the map
-	local pingPlayer, _ = UnitName(unitID)
-	EPMinimap:MessageOutput(pingPlayer)
-end
-
-function EPMinimap:PLAYER_LOGIN()
-
+EPMinimap:SetScript('OnEvent', function(self, event, ...)
 	-- Enable mouse zoom
-	maxZoom = Minimap:GetZoomLevels()
 	Minimap:EnableMouseWheel(true)
-	Minimap:SetScript('OnMouseWheel', MouseZoom)
-	
+	Minimap:SetScript('OnMouseWheel', function(self, z)
+		local maxZoom = Minimap:GetZoomLevels()
+		local currentZoom = Minimap:GetZoom()
+
+		if z > 0 and currentZoom < maxZoom then
+			Minimap:SetZoom(currentZoom + 1)
+		elseif z < 0 and currentZoom > 0 then
+			Minimap:SetZoom(currentZoom - 1)
+		end
+	end)
+
 	-- Adjust the Instance Difficulty flag
 	MiniMapInstanceDifficulty:SetParent(Minimap)
 	MiniMapInstanceDifficulty:ClearAllPoints()
@@ -76,7 +43,7 @@ function EPMinimap:PLAYER_LOGIN()
 	MiniMapTracking:SetParent(Minimap)
 	MiniMapTracking:ClearAllPoints()
 	MiniMapTracking:SetPoint('TOPRIGHT', Minimap, 'BOTTOMRIGHT', 0, 0)
-	
+
 	-- Adjust the LFD icon position
 	MiniMapLFGFrame:SetParent(Minimap)
 	MiniMapLFGFrame:ClearAllPoints()
@@ -94,7 +61,7 @@ function EPMinimap:PLAYER_LOGIN()
 	MiniMapMailFrame:SetScale(1.2)
 
 	-- Apply mask so that the square map looks right
-	Minimap:SetMaskTexture('Interface\\AddOns\\EP_Minimap\\textures\\Mask')
+	Minimap:SetMaskTexture([=[Interface\AddOns\EP_Minimap\textures\Mask]=])
 
 	-- Change minimap scale
 	Minimap:SetScale(0.8)
@@ -105,7 +72,7 @@ function EPMinimap:PLAYER_LOGIN()
 
 	-- Set the background
 	Minimap:SetBackdrop({
-		bgFile = 'Interface\\Tooltips\\UI-Tooltip-Background',
+		bgFile = [=[Interface\ChatFrame\ChatFrameBackground]=],
 		insets = {
 			left = -1 * (768 / 1080),
 			right = -1 * (768 / 1080),
@@ -113,25 +80,19 @@ function EPMinimap:PLAYER_LOGIN()
 			bottom = -1 * (768 / 1080)
 		}
 	})
-	Minimap:SetBackdropColor(0, 0, 0, 1)
+	Minimap:SetBackdropColor(0, 0, 0)
 
 	-- Hide all the items we do not want to see
-	for _, frame in pairs(frames) do
-		frame:UnregisterAllEvents()
-		frame:Hide()
+	for _, object in pairs(objects) do
+		if object:IsObjectType('Frame') then
+			object:UnregisterAllEvents()
+		end
+		object:Hide()
 	end
-	for _, border in pairs(borders) do
-		border:Hide()
-	end
-
-	-- Empty the tables to reduce memory
-	frames = nil
-	borders = nil
+	-- Empty the table to reduce memory
+	objects = nil
 
 	-- unregister as we no longer need this event
-	EPMinimap:UnregisterEvent('PLAYER_LOGIN')
-end
-
-EPMinimap:SetScript('OnEvent', function(self, event, ...)
-	self[event](self, event, ...)
+	self:UnregisterEvent('PLAYER_LOGIN')
+	self:SetScript('OnEvent', nil)
 end)
