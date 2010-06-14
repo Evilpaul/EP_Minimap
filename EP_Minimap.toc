@@ -3,10 +3,6 @@
 ## Notes: Square minimap, just like all the rest
 ## Author: EvilPaul
 ## Version: 1.0
-## DefaultState: enabled
-## X-website: http://github.com/Evilpaul
-## X-Localizations: enUS
-## X-Category: Maps
 
 EP_Minimap.lua
 EP_Minimap_Ping.lua
