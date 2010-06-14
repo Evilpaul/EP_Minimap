@@ -1,10 +1,12 @@
 local pingFrame = CreateFrame('Frame', nil, MinimapPing)
-pingFrame:RegisterEvent('PLAYER_LOGIN')
+pingFrame:RegisterEvent('ADDON_LOADED')
 
 local format = string.format
 local min = math.min
 
-function pingFrame:PLAYER_LOGIN(event)
+function pingFrame:ADDON_LOADED(event, name)
+	if name ~= 'EP_Minimap' then return end
+
 	self:SetBackdrop({
 		bgFile = [=[Interface\ChatFrame\ChatFrameBackground]=],
 		insets = {
@@ -67,7 +69,7 @@ function pingFrame:PLAYER_LOGIN(event)
 		Minimap:PingLocation(x, y)
 	end)
 
-	self:UnregisterEvent('PLAYER_LOGIN')
+	self:UnregisterEvent('ADDON_LOADED')
 	self:RegisterEvent('MINIMAP_PING')
 end
 

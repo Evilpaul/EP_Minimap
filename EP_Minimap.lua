@@ -1,7 +1,7 @@
 function GetMinimapShape() return 'SQUARE' end
 
 local EPMinimap = CreateFrame('Frame')
-EPMinimap:RegisterEvent('PLAYER_LOGIN')
+EPMinimap:RegisterEvent('ADDON_LOADED')
 
 local objects = {
 	MinimapBorderTop,
@@ -20,7 +20,9 @@ local objects = {
 	MinimapZoomOut,
 }
 
-EPMinimap:SetScript('OnEvent', function(self, event, ...)
+EPMinimap:SetScript('OnEvent', function(self, event, name)
+	if name ~= 'EP_Minimap' then return end
+
 	-- Enable mouse zoom
 	Minimap:EnableMouseWheel(true)
 	Minimap:SetScript('OnMouseWheel', function(self, z)
@@ -93,6 +95,6 @@ EPMinimap:SetScript('OnEvent', function(self, event, ...)
 	objects = nil
 
 	-- unregister as we no longer need this event
-	self:UnregisterEvent('PLAYER_LOGIN')
+	self:UnregisterEvent('ADDON_LOADED')
 	self:SetScript('OnEvent', nil)
 end)
