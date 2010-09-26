@@ -23,7 +23,7 @@ function pingFrame:ADDON_LOADED(event, name)
 	self:SetPoint('BOTTOM', Minimap, 'BOTTOM', 0, 1)
 
 	local text = self:CreateFontString(nil, 'ARTWORK')
-	text:SetFont([=[Interface\AddOns\EP_Minimap\fonts\Sansation_Regular.ttf]=], 12, 'THINOUTLINE')
+	text:SetFont([=[Interface\AddOns\EP_Minimap\fonts\DroidSans.ttf]=], 12, 'THINOUTLINE')
 	text:SetAllPoints(self)
 	text:SetJustifyH('LEFT')
 	self.text = text
