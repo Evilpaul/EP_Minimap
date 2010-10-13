@@ -5,4 +5,4 @@
 ## Version: 1.0
 
 EP_Minimap.lua
-EP_Minimap_Ping.lua
+
