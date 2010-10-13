@@ -4,18 +4,16 @@ local EPMinimap = CreateFrame('Frame')
 EPMinimap:RegisterEvent('ADDON_LOADED')
 
 local objects = {
-	MinimapBorderTop,
+	GameTimeFrame,
 	MiniMapBattlefieldBorder,
 	MiniMapMailBorder,
+	MiniMapRecordingButton,
 	MiniMapTrackingBackground,
 	MiniMapTrackingButtonBorder,
-	MinimapBorder,
-	MinimapBorder,
-	GameTimeFrame,
-	MinimapZoneTextButton,
 	MiniMapWorldMapButton,
-	MinimapToggleButton,
-	MiniMapVoiceChatFrame,
+	MinimapBorder,
+	MinimapBorderTop,
+	MinimapZoneTextButton,
 	MinimapZoomIn,
 	MinimapZoomOut,
 }
