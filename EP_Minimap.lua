@@ -16,6 +16,7 @@ local objects = {
 	MinimapZoneTextButton,
 	MinimapZoomIn,
 	MinimapZoomOut,
+	TimeManagerClockButton,
 }
 
 EPMinimap:SetScript('OnEvent', function(self, event, name)

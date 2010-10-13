@@ -3,6 +3,7 @@
 ## Notes: Square minimap, just like all the rest
 ## Author: EvilPaul
 ## Version: 1.0
+## RequiredDeps: Blizzard_TimeManager
 
 EP_Minimap.lua
 
