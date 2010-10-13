@@ -10,10 +10,10 @@ function pingFrame:ADDON_LOADED(event, name)
 	self:SetBackdrop({
 		bgFile = [=[Interface\ChatFrame\ChatFrameBackground]=],
 		insets = {
-			left = -1 * (768 / 1080),
-			right = -1 * (768 / 1080),
-			top = -1 * (768 / 1080),
-			bottom = -1 * (768 / 1080)
+			left = -1,
+			right = -1,
+			top = -1,
+			bottom = -1,
 		}
 	})
 	self:SetBackdropColor(0, 0, 0, 0.75)
