@@ -40,6 +40,9 @@ EPMinimap:SetScript('OnEvent', function(self, event, name)
 	MiniMapInstanceDifficulty:SetParent(Minimap)
 	MiniMapInstanceDifficulty:ClearAllPoints()
 	MiniMapInstanceDifficulty:SetPoint('TOPLEFT', Minimap, 'BOTTOMLEFT', 0, 0)
+	GuildInstanceDifficulty:SetParent(Minimap)
+	GuildInstanceDifficulty:ClearAllPoints()
+	GuildInstanceDifficulty:SetPoint('TOPLEFT', Minimap, 'BOTTOMLEFT', 0, 0)
 
 	-- Adjust the tracking icon position
 	MiniMapTracking:SetParent(Minimap)
