@@ -67,9 +67,6 @@ EPMinimap:SetScript('OnEvent', function(self, event, name)
 	-- Apply mask so that the square map looks right
 	Minimap:SetMaskTexture([=[Interface\AddOns\EP_Minimap\textures\Mask]=])
 
-	-- Change minimap scale
-	Minimap:SetScale(0.8)
-
 	-- Move the minimap
 	Minimap:ClearAllPoints()
 	Minimap:SetPoint('TOPRIGHT', 'UIParent', 'TOPRIGHT', -25, -30)
